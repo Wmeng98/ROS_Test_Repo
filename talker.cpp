@@ -5,6 +5,10 @@
 #include <sstream>
 #include <cstdlib> 
 #include <string>
+#include <beginner_tutorials/Num.h>
+#include <beginner_tutorials/point_cloud.h>
+
+
 
 /**
 * This tutorial demonstrates simple sending of messages over the ROS system.
@@ -49,7 +53,7 @@ NodeHandle::advertise() returns a ros::Publisher object, which serves two purpos
 
 
   72    */
-  ros::Publisher chatter_pub = n.advertise<geometry_msgs::Point32>("chatter", 1000);
+  ros::Publisher chatter_pub = n.advertise<beginner_tutorials::point_cloud>("chatter", 1000);
 /*
 A ros::Rate object allows you to specify a frequency that you would like to loop at. It will keep track of how long it has been since the last call to Rate::sleep(), and sleep for the correct amount of time.
 
@@ -81,10 +85,22 @@ Once ros::ok() returns false, all ROS calls will fail.
   86      */
     std_msgs::String msg;
 	
-	geometry_msgs::Point32 pnt;
-	pnt.x = (std::rand() % 10);
-	pnt.y = (std::rand() % 10);
-	pnt.z = 0;
+	beginner_tutorials::point_cloud pnt_cld;
+	
+	// convert count to string
+	std::ostringstream os;
+	os << count;
+
+	pnt_cld.meta = "point cloud data # " + os.str();
+	pnt_cld.x = (std::rand() % 100);
+	pnt_cld.y = (std::rand() % 100);
+	pnt_cld.z = (std::rand() % 100);
+
+	
+	//geometry_msgs::Point32 pnt;
+	//pnt.x = (std::rand() % 10);
+	//pnt.y = (std::rand() % 10);
+	//pnt.z = 0;
    
     std::stringstream ss;
     ss << "hello world " << count;
@@ -94,7 +110,7 @@ Once ros::ok() returns false, all ROS calls will fail.
 ROS_INFO and friends are our replacement for printf/cout. See the rosconsole documentation for more information
 */
 
-    ROS_INFO("%f", pnt.x);
+    ROS_INFO_STREAM(pnt_cld.meta);
    
        /**
   96      * The publish() function is how you send messages. The parameter
@@ -102,7 +118,7 @@ ROS_INFO and friends are our replacement for printf/cout. See the rosconsole doc
   98      * given as a template parameter to the advertise<>() call, as was done
   99      * in the constructor above.
  100      */
-   chatter_pub.publish(pnt);
+   chatter_pub.publish(pnt_cld);
   
    ros::spinOnce();
 

@@ -1,8 +1,9 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include "geometry_msgs/Point32.h"
-#include <string>
-   
+#include <string> 
+#include <beginner_tutorials/Num.h>
+#include <beginner_tutorials/point_cloud.h> 
    /**
   32  * This tutorial demonstrates simple receipt of messages over the ROS system.
   33  */
@@ -11,24 +12,24 @@ This is the callback function that will get called when a new message has arrive
 
 */
 
-  void chatterCallback(const geometry_msgs::Point32::ConstPtr& pnt)
+  void chatterCallback(const beginner_tutorials::point_cloud::ConstPtr& pnt_cld)
   {
-    ROS_INFO("I heard: [%f]", pnt->x);
+	ROS_INFO_STREAM(pnt_cld->meta << std::endl << "x: " << pnt_cld->x << " | " << "y: " << pnt_cld->y << " | " << "z: " << pnt_cld->z);
   }
+
    
   int main(int argc, char **argv)
   {
   /**
   42    * The ros::init() function needs to see argc and argv so that it can perform
   43    * any ROS arguments and name remapping that were provided at the command line.
-  44    * For programmatic remappings you can use a different version of init() which takes
-  45    * remappings directly, but for most command-line programs, passing argc and argv is
-  46    * the easiest way to do it.  The third argument to init() is the name of the node.
-  47    *
+
   48    * You must call one of the versions of ros::init() before using any other
   49    * part of the ROS system.
   50    */
     ros::init(argc, argv, "listener");
+	// 2 steps, initialize the node with ros::init
+	// 			start the node with ros::Nodehandle
    
      /**
   54    * NodeHandle is the main access point to communications with the ROS system.
